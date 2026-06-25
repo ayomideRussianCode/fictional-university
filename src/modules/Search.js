@@ -42,8 +42,10 @@ class Search {
   }
 
   getResults() {
-    this.resultsDiv.html("Search results here...");
-    this.isSpinnerVisible = false;
+  
+    $.getJSON("http://localhost:10004/wp-json/wp/v2/posts?search=" + this.searchField.val(), function () {
+         posts[0].title.rendered;
+    });
   }
   keyPressDispatcher(e) {
 
