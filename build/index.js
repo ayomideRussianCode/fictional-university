@@ -108,9 +108,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
 
 class Search {
   constructor() {
+    this.addSearchHTML();
     this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-overlay__results");
     this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
@@ -136,21 +140,34 @@ class Search {
           this.resultsDiv.html('<div class="spinner-loader"></div>');
           this.isSpinnerVisible = true;
         }
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       }
     } else {
-      this.resultsDiv.html('');
+      this.resultsDiv.html("");
       this.isSpinnerVisible = false;
     }
     this.previousValue = this.searchField.val();
   }
   getResults() {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON("http://localhost:10004/wp-json/wp/v2/posts?search=" + this.searchField.val(), function () {
-      posts[0].title.rendered;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().when(jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(universityData.root_url + "/wp-json/wp/v2/pages?search=" + this.searchField.val()), jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(universityData.root_url + "/wp-json/wp/v2/pages?search=" + this.searchField.val())).then((posts, pages) => {
+      var combinedResults = posts[0].concat(pages);
+      this.resultsDiv.html(`
+            <h2 class="search-overlay__section-title">General Information</h2>
+            ${combinedResults.length ? '<ul class="link-list min-list">' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+        children: "No general information matches that search."
+      })}
+            ${combinedResults.map(item => `<li><a href="${item.link}>${item.title.rendered}</a>${item.type == 'post' ? ` by ${item.authorName}` : ''}</li>`)}
+            ${combinedResults.length ? "</ul>" : ""}
+            `);
+      this.isSpinnerVisible = false;
+    }, () => {
+      this.resultsDiv.html(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+        children: "Unexpected error , please try again."
+      }));
     });
   }
   keyPressDispatcher(e) {
-    if (e.keyCode == 83 && !this.isOverlayOpen && jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(':focus')) {
+    if (e.keyCode == 83 && !this.isOverlayOpen && jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(":focus")) {
       this.openOverlay;
     }
     if (e.keyCode == 27 && this.isOverlayOpen) {
@@ -160,10 +177,27 @@ class Search {
   openOverlay() {
     this.searchOverlay.addClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").addClass("body-no-scroll");
+    this.searchField.val("");
+    setTimeout(() => this.searchField.focus(), 301);
+    this.isOverlayOpen = true;
   }
   closeOverlay() {
     this.searchOverlay.removeClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").removeClass("body-no-scroll");
+    this.isOverlayOpen = false;
+  }
+  addSearchHTML() {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").append(`
+        <div class="search-overlay">
+    <div class="search-overlay__top">
+        <div class="container">
+            <i class="fa fa-search search-overlay__icon" aria-hidden="true"></i>
+            <input type="text" class="search-term" placeholder="What are you looking for?" id="search-term" autocomplete="off">
+            <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>
+        `);
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Search``);
@@ -179,6 +213,16 @@ class Search {
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
+
+/***/ },
+
+/***/ "react/jsx-runtime"
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+(module) {
+
+module.exports = window["ReactJSXRuntime"];
 
 /***/ },
 
