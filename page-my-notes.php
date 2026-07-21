@@ -12,6 +12,12 @@ while (have_posts()) {
     ));
 ?>
     <div class="container container--narrow page-section">
+        <div class="create-note">
+            <h2 class="headline headline--medium">Create New Note</h2>
+            <input class="new-note-title" placeholder="Title">
+            <textarea placeholder="Your note here..."></textarea>
+            <span class="submit-note">Create Note</span>
+        </div>
         <ul class="link-list min-list" id="my-notes">
             <?php
             $userNotes = new WP_Query(array(
@@ -21,7 +27,7 @@ while (have_posts()) {
             ));
             while ($userNotes->have_posts()) {
                 $userNotes->the_post(); ?>
-                <li>
+                <li data-id="<?php the_ID(); ?>">
                     <input readonly class="note-title-field" value="<?php echo esc_attr(get_the_title()); ?>">
                     <span class="edit-note"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span>
                     <span class="edit-note"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
