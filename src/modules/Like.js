@@ -16,23 +16,26 @@ class Like{
         var currentLikeBox = $(e.target).closest(".like-box");
 
         if(currentLikeBox.data("exists") == "yes"){
-            this.deleteLike();
+            this.deleteLike(currentLikeBox);
     } else {
-        this.createLike();
+        this.createLike(currentLikeBox);
     }
 }
 
-    createLike() {
+    createLike(currentLikeBox) {
        $.ajax({
+         beforeSend: (xhr) => {
+            xhr.setRequestHeader("X-WP-Nonce", universityData.nonce);
+        }
         url: universityData.root_url + "/wp-json/university/v1/manageLike",
         type: "POST",
         success: (response) => {console.log("Congrats, you created a new like!"); console.log(response);},
         error: (response) => { console.log("Sorry, you could not create a new like."); console.log(response);},
-        data: {professorId: universityData.professor_id},
+        data: {professorId: currentLikeBox.data("professor")},
        });
     }
 
-    deleteLike(){
+    deleteLike(currentLikeBox){
        $.ajax({
         beforeSend: (xhr) => {
             xhr.setRequestHeader("X-WP-Nonce", universityData.nonce);
