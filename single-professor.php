@@ -14,7 +14,7 @@ while (have_posts()) {
                     ?>
                 </div>
                 <div class="two-thirds">
-                    <?php 
+                    <?php
                     $likeCount = new WP_Query(array(
                         'post_type' => 'like',
                         'meta_query' => array(
@@ -27,7 +27,7 @@ while (have_posts()) {
                     ));
 
                     $existStatus = 'no';
-                    if(is_user_logged_in()) {
+                    if (is_user_logged_in()) {
                         $existQuery = new WP_Query(array(
                             'author' => get_current_user_id(),
                             'post_type' => 'like',
@@ -43,9 +43,8 @@ while (have_posts()) {
                             $existStatus = 'yes';
                         }
                     }
-                    
 
-                  
+
                     ?>
                     <span class="like-box" data-professor="<?php the_ID(); ?>" data-exists="<?php echo $existStatus; ?>" data-professor="<?php the_ID(); ?>" data-like="<?php echo $existQuery->posts[0]->ID; ?>">
                         <i class="fa fa-heart-o" aria-hidden="true"></i>
