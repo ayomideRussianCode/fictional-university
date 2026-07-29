@@ -6,10 +6,11 @@ if (!is_user_logged_in()) {
 get_header();
 while (have_posts()) {
     the_post();
-    pageBanner(array(
-        'title' => 'Title',
-        'subtitle' => 'subtitle'
-    ));
+    pageBanner();
+    // (array(
+    //     'title' => 'Title',
+    //     'subtitle' => 'subtitle'
+    // ));
 ?>
     <div class="container container--narrow page-section">
         <div class="create-note">
@@ -17,6 +18,7 @@ while (have_posts()) {
             <input class="new-note-title" placeholder="Title">
             <textarea placeholder="Your note here..."></textarea>
             <span class="submit-note">Create Note</span>
+            <span class="note-limit-message">Note limit reached: delete an existing note to make room for a new one.</span>
         </div>
         <ul class="link-list min-list" id="my-notes">
             <?php
@@ -28,18 +30,18 @@ while (have_posts()) {
             while ($userNotes->have_posts()) {
                 $userNotes->the_post(); ?>
                 <li data-id="<?php the_ID(); ?>">
-                    <input readonly class="note-title-field" value="<?php echo esc_attr(get_the_title()); ?>">
+                    <input readonly class="note-title-field" value="<?php echo str_replace('Private: ', '',  esc_attr(get_the_title())); ?>">
                     <span class="edit-note"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span>
-                    <span class="edit-note"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
-                    <textarea readonly class="note-body-field"><?php echo esc_attr(get_the_content()); ?></textarea>
+                    <span class="delete-note"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
+                    <textarea readonly class="note-body-field"><?php echo esc_textarea(get_the_content()); ?></textarea>
                     <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i>Save</span>
                 </li>
             <?php  }
-            echo paginate_links();
-            ?>
 
+            ?>
         </ul>
     </div>
 <?php }
+
 get_footer();
 ?>

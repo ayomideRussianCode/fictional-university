@@ -2,7 +2,7 @@
 get_header();
 pageBanner(array(
     'title' => 'Search Results',
-    'subtitle' => 'You searched for &ldquo;' . get_search_query() . '&rdquo;'
+    'subtitle' => 'You searched for &ldquo;' .  esc_html(get_search_query(false)) . '&rdquo;'
 ));
 ?>
 
@@ -15,13 +15,16 @@ pageBanner(array(
     }
     echo paginate_links();
     } else { 
-      echo  ' <h2 class="headline headline--medium">No results match that search. Please try again.</h2> ';
+      echo  ' <h2 class="headline headline--medium">No results match that search.</h2> ';
     }
 get_search_form();
 ?>
 </div>
 
 </div>
+
 <?php
+
 get_footer();
+
 ?>
